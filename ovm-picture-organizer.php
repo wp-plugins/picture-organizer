@@ -10,7 +10,7 @@
  * Update Server: http://www.profi-blog.com/plugins/picture-organizer
  * Min WP Version: 4.2.2
  * License: GPLv2 or later
- * Version: 0.9
+ * Version: 1.0
  */
 
 /*
