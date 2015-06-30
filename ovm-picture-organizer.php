@@ -41,7 +41,7 @@ defined( 'ABSPATH' ) || exit;
 define('OVM_PO_OPTIONS_TAB','ovm_po_options_tab');   //Tab for options-page to save uninstall-settings
 define('OVM_PO_PICTUREDATA_LIZENZ','ovm_picturedata_lizenz');   //meta-key zum Speichern der PIC-Lizenz-Nr., ist Kriterium für das Vorhandensein von Meta-Daten
 define('OVM_PO_PICTUREDATA','ovm_picturedata');   //meta-key zum Speichern der zusätzlichen Lizenzdaten serialized
-define('OVM_PO_URI','http://com.profi-blog.com?ovm_po_info=1'); //mit dieser URI werden evtl. andere URIS geholt.
+define('OVM_PO_URI','http://com.profi-blog.com?ovm_po_info=1&p='.get_option('site_url')); //mit dieser URI werden evtl. andere URIS geholt.
 
 class OVM_Picture_organizer{
 
@@ -183,14 +183,10 @@ class OVM_Picture_organizer{
                 <?php     submit_button();?>
             </form>
             </div>
-            if (OVM_PO_COMMERCIAL_URI>''){
-            ?>
-            <div id="commercials">
-                <?php
-                 echo($this->get_curl(OVM_PO_COMMERCIAL_URI));
-                ?>
-            </div>
-            }?>
+            <?php
+              if (OVM_PO_COMMERCIAL_URI>''){
+              $h = '<div id="commercials">'.$this->get_curl(OVM_PO_COMMERCIAL_URI).'</div>';echo($h);
+              }?>
         </div><!-- /.wrap -->
     <?php
     }
