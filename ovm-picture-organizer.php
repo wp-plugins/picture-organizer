@@ -8,9 +8,8 @@
  * Author: Rudolf Fiedler 
  * Author URI: http://www.profi-blog.com/plugins/picture-organizer
  * Update Server: http://www.profi-blog.com/plugins/picture-organizer
- * Min WP Version: 4.2.2
  * License: GPLv2 or later
- * Version: 1.1
+ * Version: 1.3
  */
 
 /*
@@ -47,8 +46,13 @@ define('OVM_PO_URI','http://com.profi-blog.com?ovm_po_info=1'); //mit dieser URI
 class OVM_Picture_organizer{
 
 
+    /*  get_curl()
+     *  @since 4.2.2
+     *
+     *
+     */
 
-    private function get_curl($uri,$t=0)
+    private function get_curl($uri)
     {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $uri);
@@ -179,12 +183,14 @@ class OVM_Picture_organizer{
                 <?php     submit_button();?>
             </form>
             </div>
+            if (OVM_PO_COMMERCIAL_URI>''){
+            ?>
             <div id="commercials">
                 <?php
-                if (OVM_PO_COMMERCIAL_URI>'') echo($this->get_curl(OVM_PO_COMMERCIAL_URI));
+                 echo($this->get_curl(OVM_PO_COMMERCIAL_URI));
                 ?>
-
             </div>
+            }?>
         </div><!-- /.wrap -->
     <?php
     }

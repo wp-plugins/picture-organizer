@@ -81,12 +81,15 @@ You will find the shortcode in the plugins-description of your plugins page.
 
 == Screenshots ==
 
-1. Plugins-description with the shortcode to publish the copyright-information
-2. Attachment-details with the additional fields (Autor, Lizenzkey, portal, URI, Date of invoice
-3. Once more Attachment-Deitals on the Attachment-Details-Edit-Page
+1. Plugin-Beschreibung mit Angabe des Shortcodes für die Anzeige der Daten im Inhalt
+2. Attachment-Details bei der Neuanlage eines Bildes
+3. Nochmal Attachment-Details - Detailansicht
+4. Anzeige der Beispieldaten im Frontend
 
 
 == Changelog ==
+= 1.3 = 
+* Optimize curl-calls
 = 1.0 = 
 * Secure formfields - validation
 
