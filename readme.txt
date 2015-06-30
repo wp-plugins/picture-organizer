@@ -49,6 +49,7 @@ The result is: If you use this plugin correctly you never have to pay for your c
 * PHP 5.2 oder größer
 
 = Installation =
+= English =
  1. Lade  das Plugin "Picture-Organizer" einfach über die WordPress-Pluginfunktion in Ihre WordPress-Seite (Als Suchbegriff einfach "Picture-Organizer" eingeben.
  2. Aktiviere das Plugin über die Plugin-Übersichtsseite
  3. Füge den Shortcode [ovm_picture-organizer liste] am besten in das Impressum an der Stelle ein, an der die Liste mit den Urheberrechtsdaten gezeigt werden soll.
