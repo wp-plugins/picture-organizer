@@ -9,7 +9,7 @@
  * Author URI: http://www.profi-blog.com/plugins/picture-organizer
  * Update Server: http://www.profi-blog.com/plugins/picture-organizer
  * License: GPLv2 or later
- * Version: 1.3
+ * Version: 1.4
  */
 
 /*
@@ -35,7 +35,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 defined( 'ABSPATH' ) || exit;
 
 /*  Definition der metas für wp_options und post_meta
- *  @since   4.2.2
+ *  @since   1.1
  *
  */
 define('OVM_PO_OPTIONS_TAB','ovm_po_options_tab');   //Tab for options-page to save uninstall-settings
@@ -47,7 +47,7 @@ class OVM_Picture_organizer{
 
 
     /*  get_curl()
-     *  @since 4.2.2
+ *  @since   1.1
      *
      *
      */
@@ -66,7 +66,7 @@ class OVM_Picture_organizer{
    /**
      * Konstruktor der Klasse
      *
-     * @since   4.2.2
+    *  @since   1.1
      */
     public function __construct()
 {
@@ -110,7 +110,7 @@ class OVM_Picture_organizer{
 
 
     /* Definition des Options-Menüs
-     * @since   4.2.2
+ *  @since   1.1
      */
     public function my_plugin_menu() {
         add_options_page('Picture-Organizer', 'Picture-Organizer', 'manage_options', 'picture-organizer-options.php', array($this,'picture_organizer_options'));
@@ -119,7 +119,7 @@ class OVM_Picture_organizer{
     /* Einstellungen vom Picture-Organizer
      * Aktuell nur die Einstellung, ob beim Deinstallieren alles gelöscht werden soll
      * Weitere Erweiterungen für Premium-Version geplant
-     * @since   4.2.2
+ *  @since   1.1
      */
     public function picture_organizer_options()
     {global $wpdb;
@@ -195,7 +195,7 @@ class OVM_Picture_organizer{
     /*  function get_picture_credits()
       * Ermittlung aller Posts/type=attachment zur Ausgabe über shortcode
       *
-      * @since   4.2.2
+      *  @since   1.1
       */
     private function get_picture_credits()
     {global $wpdb;
@@ -226,7 +226,7 @@ class OVM_Picture_organizer{
 
 /*      show_lizenzinformationen($atts)
  *      Holt die Inhalte der Attachments zur Ausgabe über den Shortcode
- *      @since   4.2.2
+      *  @since   1.1
  */
  public function show_lizenzinformationen($atts)
     {
@@ -240,7 +240,7 @@ class OVM_Picture_organizer{
     }
 /*      add_image_attachment_fields_to_edit
  *      Erzeugt das Array mit den zusätzlichen Feldinformatinoen für die Ausgabe der Maske im  Pflegebereich/Dashboard
- *      @since 4.2.2
+      *  @since   1.1
  */
     public function add_image_attachment_fields_to_edit($form_fields, $post)
     {
