@@ -3,14 +3,14 @@
  * Plugin Name: OVM Picture Organizer
  * Text Domain: picture-organizer
  * Plugin URI: http://www.picture-organizer.com
- * Description: Nie wieder Abmahnungen wegen fehlender Urheberrechtsangabe bei Bildern. mit diesem Plugin kannst Du notwendigen Daten zu jedem Bild erfassen, und dann über einen einfachen Shortcode z.B. im Impressum als Liste mit allen Angaben und Links ausgeben.
+ * Description: Nie wieder Abmahnungen wegen fehlender Urheberrechtsangabe bei Bildern. Mit diesem Plugin kannst Du notwendigen Daten zu jedem Bild zuordnen und über den Shortcode [ovm_picture-organizer liste] z.B. im Impressum als formatierte Liste mit allen Angaben und Links ausgeben.
  * Projekt: ovm-picture-organizer
  * Author: Rudolf Fiedler 
  * Author URI: http://www.profi-blog.com/plugins/picture-organizer
  * Update Server: http://www.profi-blog.com/plugins/picture-organizer
  * Min WP Version: 4.2.2
  * License: GPLv2 or later
- * Version: 1.0
+ * Version: 1.1
  */
 
 /*
@@ -88,9 +88,6 @@ class OVM_Picture_organizer{
 
     }
 
-public function functiontest(){
-    echo("drin");
-}
 
 
 
@@ -113,7 +110,6 @@ public function functiontest(){
      */
     public function my_plugin_menu() {
         add_options_page('Picture-Organizer', 'Picture-Organizer', 'manage_options', 'picture-organizer-options.php', array($this,'picture_organizer_options'));
-        add_menu_page( "Medien2", "medien2", "manage_options", "/edit.php?post_type=attachment", array($this,'functiontest'));
     }
 
     /* Einstellungen vom Picture-Organizer
