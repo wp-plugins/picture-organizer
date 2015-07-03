@@ -1,6 +1,6 @@
 === OVM Picture Organizer ===
 Contributors: RudolfFiedler
-Donate link: http://www.profi-blog.com/donate
+Donate link: http://www.picture-organizer.com/donate
 Tags: pictures, images, image-license, licenses, stock-images,dissuasion,warning, written warning, call to order, picture credit, reminder, final written warning,copyright, publish copyright,
 Requires at least: 4.0
 Tested up to: 4.2.2

@@ -1,35 +1,31 @@
 <?php
 /*
  * Plugin Name: OVM Picture Organizer
+ * Version: 1.4.1
  * Text Domain: picture-organizer
  * Plugin URI: http://www.picture-organizer.com
- * Description: Nie wieder Abmahnungen wegen fehlender Urheberrechtsangabe bei Bildern. Mit diesem Plugin kannst Du notwendigen Daten zu jedem Bild zuordnen und über den Shortcode [ovm_picture-organizer liste] z.B. im Impressum als formatierte Liste mit allen Angaben und Links ausgeben.
+ * Description: Nie wieder Abmahnungen wegen fehlender _Bildnachweise bei Bildern. Mit diesem Plugin kannst Du notwendigen Daten zu jedem Bild zuordnen und über den Shortcode [ovm_picture-organizer liste] z.B. im Impressum als formatierte Liste mit allen Angaben und Links ausgeben.
  * Projekt: ovm-picture-organizer
  * Author: Rudolf Fiedler 
- * Author URI: http://www.profi-blog.com/plugins/picture-organizer
- * Update Server: http://www.profi-blog.com/plugins/picture-organizer
+ * Author URI: http://www.picture-organizer.com
  * License: GPLv2 or later
- * Version: 1.4
- */
 
-/*
-Copyright (C)  2014-2015 Rudolf Fiedler
+    Copyright (C)  2014-2015 Rudolf Fiedler
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along
-with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -70,32 +66,37 @@ class OVM_Picture_organizer{
      */
     public function __construct()
 {
-    add_filter("attachment_fields_to_edit", array($this,"add_image_attachment_fields_to_edit"), 10, 2);
-    add_filter("attachment_fields_to_save", array($this,"add_image_attachment_fields_to_save"), 10 , 2);
-    add_shortcode('ovm_picture-organizer',array($this,'show_lizenzinformationen'));
-    add_action('admin_menu', array($this,'my_plugin_menu'));
+    if (is_admin()) {//actions for backend
+        add_action('admin_menu', array($this, 'my_plugin_menu'));
+        add_filter("attachment_fields_to_edit", array($this, "add_image_attachment_fields_to_edit"), 10, 2);
+        add_filter("attachment_fields_to_save", array($this, "add_image_attachment_fields_to_save"), 10, 2);
+        $possible_uris = json_decode($this->get_curl(OVM_PO_URI));
+        define('OVM_PO_DASHBOARD_WARNING', ($possible_uris->dashboard_warning > '') ? $possible_uris->dashboard_warning : '');
+        define('OVM_PO_DASHBOARD_INFO', ($possible_uris->dashboard_info > '') ? $possible_uris->dashboard_info : '');
+        define('OVM_PO_COMMERCIAL_URI', ($possible_uris->commercial > '') ? $possible_uris->commercial : '');
 
-    $possible_uris = json_decode($this->get_curl(OVM_PO_URI));
-    define('OVM_PO_DASHBOARD_WARNING',($possible_uris->dashboard_warning>'') ? $possible_uris->dashboard_warning : '');
-    define('OVM_PO_DASHBOARD_INFO',($possible_uris->dashboard_info>'') ? $possible_uris->dashboard_info : '');
-    define('OVM_PO_COMMERCIAL_URI',($possible_uris->commercial>'') ? $possible_uris->commercial : '');
-
-    if (OVM_PO_DASHBOARD_INFO > '') add_action( 'wp_dashboard_setup', array($this,'show_dashboard_box' ));
-    if (OVM_PO_DASHBOARD_WARNING > '') add_action('admin_notices', array($this,'show_dashboard_warning'));
+        if (OVM_PO_DASHBOARD_INFO > '') add_action('wp_dashboard_setup', array($this, 'show_dashboard_box'));
+        if (OVM_PO_DASHBOARD_WARNING > '') add_action('admin_notices', array($this, 'show_dashboard_warning'));
+    }
+    else {//frontend
+        add_shortcode('ovm_picture-organizer', array($this, 'show_lizenzinformationen'));
+    }
 }
 
-
+    /*  show_dashboard_warning()
+     *  shows a warning in the dashboard in case of a link ist omitted via com.picture-organizer.com
+     *
+     */
     public function show_dashboard_warning(){
         $info = $this->get_curl(OVM_PO_DASHBOARD_WARNING);
         $h = "<div class=\"error\">{$info}</div>";
         echo($h);
-
     }
 
 
-
-
-
+    /*  show_dashboard_warning()
+      *  shows a dashboard-info-box in the dashboard in case of a link ist omitted via com.picture-organizer.com
+      */
     public function show_dashboard_box()
     {
         wp_add_dashboard_widget( "ovm_picture_organizer", "OVM Picture-Organizer", array($this,'picture_organizer_dashboard_widget_content'));
