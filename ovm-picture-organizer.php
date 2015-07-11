@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: OVM Picture Organizer
- * Version: 1.4.1
+ * Version: 1.4.3
  * Text Domain: picture-organizer
  * Plugin URI: http://www.picture-organizer.com
  * Description: Nie wieder Abmahnungen wegen fehlender _Bildnachweise bei Bildern. Mit diesem Plugin kannst Du notwendigen Daten zu jedem Bild zuordnen und über den Shortcode [ovm_picture-organizer liste] z.B. im Impressum als formatierte Liste mit allen Angaben und Links ausgeben.
@@ -34,79 +34,111 @@ defined( 'ABSPATH' ) || exit;
  *  @since   1.1
  *
  */
+define('PO_EMAIL','r.fiedler@ovm.de');
 define('OVM_PO_OPTIONS_TAB','ovm_po_options_tab');   //Tab for options-page to save uninstall-settings
+define('OVM_PO_OUTPUT_OPTIONS_TAB','ovm_po_output_options_tab');  //Tab for output-options
 define('OVM_PO_PICTUREDATA_LIZENZ','ovm_picturedata_lizenz');   //meta-key zum Speichern der PIC-Lizenz-Nr., ist Kriterium für das Vorhandensein von Meta-Daten
 define('OVM_PO_PICTUREDATA','ovm_picturedata');   //meta-key zum Speichern der zusätzlichen Lizenzdaten serialized
-define('OVM_PO_URI','http://com.profi-blog.com?ovm_po_info=1&p='.get_option('site_url')); //mit dieser URI werden evtl. andere URIS geholt.
+
+if (get_option("siteurl")=='http://po')
+    define('OVM_PO_URI','http://basic/?ovm_po_info=1&log=1'); //test/development
+  else
+   define('OVM_PO_URI','http://com.profi-blog.com/?ovm_po_info=1&log=1'); //production-environment
+
 
 class OVM_Picture_organizer{
+    public $plugin_data,$blogurl,$checked;
+    public $dashboard_warning,$dashboard_info,$commercial;
 
 
-    /*  get_curl()
- *  @since   1.1
-     *
-     *
-     */
-
-    private function get_curl($uri)
-    {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $uri);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $content = curl_exec($ch);
-            curl_close($ch);
-        return $content;
-    }
-
-
-   /**
+    /**
      * Konstruktor der Klasse
      *
     *  @since   1.1
      */
     public function __construct()
 {
-    if (is_admin()) {//actions for backend
+    $this->blogurl = get_bloginfo('url');
+    if (is_admin()) { //actions for backend
+        add_action('admin_head', array($this,'css_for_mediadetails' ));
+        add_action('admin_head', array($this,'get_po_links'));
         add_action('admin_menu', array($this, 'my_plugin_menu'));
         add_filter("attachment_fields_to_edit", array($this, "add_image_attachment_fields_to_edit"), 10, 2);
         add_filter("attachment_fields_to_save", array($this, "add_image_attachment_fields_to_save"), 10, 2);
-        $possible_uris = json_decode($this->get_curl(OVM_PO_URI));
-        define('OVM_PO_DASHBOARD_WARNING', ($possible_uris->dashboard_warning > '') ? $possible_uris->dashboard_warning : '');
-        define('OVM_PO_DASHBOARD_INFO', ($possible_uris->dashboard_info > '') ? $possible_uris->dashboard_info : '');
-        define('OVM_PO_COMMERCIAL_URI', ($possible_uris->commercial > '') ? $possible_uris->commercial : '');
 
-        if (OVM_PO_DASHBOARD_INFO > '') add_action('wp_dashboard_setup', array($this, 'show_dashboard_box'));
-        if (OVM_PO_DASHBOARD_WARNING > '') add_action('admin_notices', array($this, 'show_dashboard_warning'));
+        add_action('wp_dashboard_setup', array($this, 'show_dashboard_box'));
+        add_action('admin_notices', array($this, 'show_dashboard_warning'));
     }
     else {//frontend
         add_shortcode('ovm_picture-organizer', array($this, 'show_lizenzinformationen'));
     }
 }
 
+    /**  Bei Aktivierung des Plugins werden die Default-Einstellungen für die Ausgabe definiert und gespeichert
+     *
+     */
+    public function plugin_init() {
+        $vars = get_option(OVM_PO_OUTPUT_OPTIONS_TAB);
+        if (false === $vars) {//Vorhandene Daten nicht überschreiben
+            $vars["promotion_text"] = 'Bildnachweise einfach und professionell verwalten und ausgeben mit dem <a href="http://www.picture-organizer.com" target="_blank">Picture-Organizer</a>';
+            $vars["promotion_position"] = 0;
+            update_option(OVM_PO_OUTPUT_OPTIONS_TAB, $vars);
+        }
+    }
+
+    /**  get_po_links()
+     *   Checks only in dashboard-mode, attachment-details and in po-settings
+     *
+     */
+    public function get_po_links(){
+        $screen = get_current_screen();
+        if ($screen->base=='dashboard' or $screen->base=="settings_page_picture-organizer-options" or ($screen->base=='post' and $screen->post_type=='attachment')) {
+            $this->possible_uris = $this->get_uri(OVM_PO_URI);
+            if (is_object($this->possible_uris)) {
+                $this->dashboard_warning = ($this->possible_uris->dashboard_warning > '') ? $this->possible_uris->dashboard_warning : '';
+                $this->dashboard_info = ($this->possible_uris->dashboard_info > '') ? $this->possible_uris->dashboard_info : '';
+                $this->commercial = ($this->possible_uris->commercial > '') ? $this->possible_uris->commercial : '';
+            }
+        }
+        return;
+    }
+
     /*  show_dashboard_warning()
      *  shows a warning in the dashboard in case of a link ist omitted via com.picture-organizer.com
      *
      */
     public function show_dashboard_warning(){
-        $info = $this->get_curl(OVM_PO_DASHBOARD_WARNING);
-        $h = "<div class=\"error\">{$info}</div>";
-        echo($h);
+        if ($this->dashboard_warning > '') {
+            $info = $this->get_uri($this->dashboard_warning, false);
+            if ($info > '') {
+                $h = "<div class=\"error\">{$info}</div>";
+                echo($h);
+            }
+        }
     }
 
 
-    /*  show_dashboard_warning()
-      *  shows a dashboard-info-box in the dashboard in case of a link ist omitted via com.picture-organizer.com
-      */
+    /*  show_dashboard_box()
+     *  shows a dashboard-info-box in the dashboard in case of a link ist omitted via com.picture-organizer.com
+     *  only using for important infos, but not warnings.
+     */
     public function show_dashboard_box()
     {
-        wp_add_dashboard_widget( "ovm_picture_organizer", "OVM Picture-Organizer", array($this,'picture_organizer_dashboard_widget_content'));
+        if ($this->dashboard_info > '')
+            wp_add_dashboard_widget( "ovm_picture_organizer", "OVM Picture-Organizer", array($this,'picture_organizer_dashboard_widget_content'));
         return;
     }
 
 
+
+    /*  picture_organizer_dashboard_widget_content()
+     *  Using only for important infos like neccessary update or anything else...
+     *  Is only shown if OVM_PO_DASHBOARD_INFO > '', is controlled in _construct width setting action or not
+     *
+     */
     public function picture_organizer_dashboard_widget_content()
     {
-        echo($this->get_curl(OVM_PO_DASHBOARD_INFO));
+        if ($this->dashboard_info > '') echo($this->get_uri($this->dashboard_info,false));
     }
 
 
@@ -124,8 +156,8 @@ class OVM_Picture_organizer{
      */
     public function picture_organizer_options()
     {global $wpdb;
-        $tab = sanitize_text_field($_GET['tab']);
-        $active_tab = $tab >'' ? $tab : OVM_PO_OPTIONS_TAB;
+        $active_tab = sanitize_text_field(isset($_GET['tab'])? $_GET['tab']:OVM_PO_OUTPUT_OPTIONS_TAB);
+        $this->checked = ' checked="checked" ';
 //-----------------------speichern der Optionen
    if (count($_POST)>0)
         {// Speichern:
@@ -134,40 +166,71 @@ class OVM_Picture_organizer{
             {
                 case OVM_PO_OPTIONS_TAB:
                     $vars["uninstall_delete"]=(int)$_POST["uninstall_delete"];
-                    update_option($active_tab,$vars);
                     break;
+                case OVM_PO_OUTPUT_OPTIONS_TAB:
+                    $vars["promotion_text"]=stripslashes($_POST["promotion_text"]);
+                    $vars["promotion_position"]=(int)$_POST["promotion_position"];
             }
+            update_option($active_tab,$vars);
         }
 
 
 //-----------------------Ende speichern der Optionen
         $o = maybe_unserialize(get_option($active_tab));
         if (is_array($o)) extract($o);
-        if ($uninstall_delete==1)
-            $c = "checked = \"checked\"";
-        else
-            $c="";
-
         //CSS für die eigenen Inhalte
         ?>
         <style type="text/css">
             #form_div      {padding-top:12px;display:block;float:left;width:500px;margin-right:24px;}
-            #commercials   {margin-top:18px;display:block;border:1px solid #aaaaaa;width:320px;background-color:#dddddd;float:left}
-            fieldset       {border:1px solid #aaaaaa;;padding:12px}
+            #ovm_po_commercials   {margin-top:18px;display:block;border:1px solid #aaaaaa;width:320px;float:left}
+            .ovm fieldset       {border:1px solid #aaaaaa;;padding:8px;width:100%}
+            .ovm table th   {text-align:left}
+            .ovm table th, .ovm table td   {vertical-align:top}
+            .ovm textarea     {width:100%;height:200px;font-size:10pt}
         </style>
-        <div class="wrap">
+
+        <div class="wrap ovm">
             <h2>Picture-Organizer - Einstellungen</h2>
             <?php settings_errors(); ?>
             <h2 class="nav-tab-wrapper">
-                <a href="?page=picture-organizer-options.php&tab=".OVM_PO_OPTIONS_TAB." class="nav-tab <?php echo $active_tab == OVM_PO_OPTIONS_TAB ? 'nav-tab-active' : ''; ?>">Uninstall-Einstellungen</a>
+                <a href="?page=picture-organizer-options.php&tab=<?php echo OVM_PO_OUTPUT_OPTIONS_TAB?>" class="nav-tab <?php echo $active_tab == OVM_PO_OUTPUT_OPTIONS_TAB ? 'nav-tab-active' : ''; ?>">Ausgabe-Einstellungen</a>
+                <a href="?page=picture-organizer-options.php&tab=<?php echo OVM_PO_OPTIONS_TAB?>" class="nav-tab <?php echo $active_tab == OVM_PO_OPTIONS_TAB ? 'nav-tab-active' : ''; ?>">Uninstall-Einstellungen</a>
             </h2>
             <div id="form_div">
             <form method="post" action="#" id="options_form">
                 <?php
-                $ds = maybe_unserialize(get_option($active_tab));
                 switch ($active_tab)
                 {
+                    case OVM_PO_OUTPUT_OPTIONS_TAB:
+                        if (!isset($promotion_position)) $promotion_position=0;  //Default keine Ausgabe!
+
+                        ?>
+                        <fieldset><legend>Einstellungen für die Ausgabe der Bildnachweise</legend>
+                            <table style="width:100%">
+                                <tr>
+                                    <th>HTML-Text für die Ausgabe</th>
+                                    <td><textarea name="promotion_text" id="promotion_text"><?php echo(isset($promotion_text)?$promotion_text :'')?></textarea></td>
+                                </tr>
+                                <tr>
+                                    <th>Positionierung des Textes</th>
+                                    <td><p>Zeigen Sie Ihren Besuchern, dass Sie Ihre Homepage und Bildnachweise professionell organisieren!<br>Die beste Wirkung erreichen Sie durch Positionierung oberhalb der Nachweise.</p>
+
+                                        <input type="radio" name="promotion_position" id="promotion_position" value="0" <?php echo((0==$promotion_position) ?$this->checked:'') ?>> Nicht ausgeben <br>
+                                        <input type="radio" name="promotion_position" id="promotion_position" value="1" <?php echo((1==$promotion_position) ?$this->checked:'') ?>> Oben ausgeben <br>
+                                        <input type="radio" name="promotion_position" id="promotion_position" value="2" <?php echo((2==$promotion_position) ?$this->checked:'') ?>> Unten ausgeben <br>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <?
+                        break;
                     case OVM_PO_OPTIONS_TAB:
+                        if (!isset($uninstall_delete)) $uninstall_delete=0;
+                        if (1 == $uninstall_delete)
+                            $c = "checked = \"checked\"";
+                        else
+                            $c="";
+
                         ?>
                         <fieldset><legend>Einstellung bei Deinstallation</legend>
                         <table>
@@ -181,12 +244,12 @@ class OVM_Picture_organizer{
                         break;
                 } // end switch
                 ?>
-                <?php     submit_button();?>
+                <?php submit_button();?>
             </form>
             </div>
             <?php
-              if (OVM_PO_COMMERCIAL_URI>''){
-              $h = '<div id="commercials">'.$this->get_curl(OVM_PO_COMMERCIAL_URI).'</div>';echo($h);
+              if ($this->commercial > ''){
+              $h = '<div id="ovm_po_commercials">'.$this->get_uri($this->commercial,false).'</div>';echo($h);
               }?>
         </div><!-- /.wrap -->
     <?php
@@ -209,18 +272,32 @@ class OVM_Picture_organizer{
         );
         $image_credits = get_posts($args);   //alle attachments in $image_credits
         $h='<style type=text/css>#image_credits td {vertical-align:top}</style>';
+        $promotion_ausgabe = get_option(OVM_PO_OUTPUT_OPTIONS_TAB);
+
+        if ($promotion_ausgabe===false) {
+            $this->plugin_init();
+            $promotion_ausgabe = get_option(OVM_PO_OUTPUT_OPTIONS_TAB);
+        }// Anlege
+
+        if($promotion_ausgabe["promotion_position"]==1) {
+            $h .= "<p>{$promotion_ausgabe['promotion_text']}</p>";
+        }
+
+
         $h.="<table id=\"image_credits\"\n>"; //html zur Ausgabe erzeugen
         foreach($image_credits as $credit)
         {
             $credit_lizenz = get_post_meta($credit->ID,OVM_PO_PICTUREDATA_LIZENZ);
             $credit_data = get_post_meta($credit->ID,OVM_PO_PICTUREDATA);
-            //var_dump($credit_data);
             $h .="<tr>
                     <td>{$credit_lizenz[0]}</td>
                     <td><a href=\"{$credit_data[0]['uri']}\">&copy; {$credit_data[0]['author']} {$credit_data[0]['portal']} {$credit_data[0]['kauf']}</a><br>{$credit_data[0]['bemerkung_online']}</td>
                   </tr>\n";
         }
         $h.="</table>\n";//end table width image_credits
+        if($promotion_ausgabe["promotion_position"]==2) {
+            $h .= "<p>{$promotion_ausgabe['promotion_text']}</p>";
+        }
         return $h;   //Rückgabe der html-inhalte
     }
 
@@ -336,6 +413,63 @@ class OVM_Picture_organizer{
         update_post_meta($post['ID'], OVM_PO_PICTUREDATA, $ovm_picturedata);
         return $post;
     }
+
+
+    /**
+     * @param $uri : uri to read
+     * @return mixed in json-format
+     */
+    private function get_uri($uri,$json_encode=true)
+    {
+        $args = array(
+            'timeout' => 5,
+            'redirection' => 5,
+            'httpversion' => '1.0',
+            'user-agent' => 'WordPress/' . '; ' . get_bloginfo('url'),
+            'blocking' => true,
+            'headers' => array(),
+            'cookies' => array(),
+            'body' => null,
+            'compress' => false,
+            'decompress' => true,
+            'sslverify' => true,
+            'stream' => false,
+            'filename' => null
+        );
+        if (strpos($uri, "?") === false)
+            $uri .= "?";
+        else
+            $uri .= "&";
+        if (!function_exists('get_plugin_data')) require_once(ABSPATH . 'wp-admin/includes/plugin.php');
+        $this->plugin_data = get_plugin_data(__FILE__);
+        $uri .= "version=" . $this->plugin_data['Version'] . "&p=" . $this->blogurl;
+
+        $response = wp_remote_get($uri, $args);
+        if (is_wp_error($response)) {
+            $message = "Fehler bei wp_remote_get, uri: " . $uri . "\n";
+            $message .= "\nError-Message:" . $response->errors["http_request_failed"][0];
+            mail(PO_EMAIL, "wp_remote_get_error", $message);
+            return false;   //error getting Info-Uris - no problem - be silent
+        }
+        if ($json_encode === true) {
+            $retval = json_decode($response['body']);  //return error-free response
+        } else {
+            $retval = $response['body'];
+        }
+        return $retval;
+    }
+
+    /**  css_for_mediatetails()
+     *   Adds CSS-Infos for the mediacenter-detail-pages
+     *
+     */
+    public function css_for_mediadetails(){
+        $h = '<style type="text/css" media="screen">.compat-attachment-fields th { text-align:left;vertical-align:top }</style>';
+        echo $h;
+        return;
+    }
+
+
 }//end class
 
 $OVM_Picture_organizer = new OVM_Picture_organizer();

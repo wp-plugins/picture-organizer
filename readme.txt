@@ -1,14 +1,14 @@
 === OVM Picture Organizer ===
 Contributors: RudolfFiedler
 Donate link: http://www.picture-organizer.com/donate
-Tags: pictures, images, image-license, licenses, stock-images,dissuasion,warning, written warning, call to order, picture credit, reminder, final written warning,copyright, publish copyright,
+Tags: pictures, images, image-license, licenses, stock-images, written warning, abmahnung, quellenangaben, Bildquelle, Bildnachweis, Urheberrecht, Bilder, Fotos 
 Requires at least: 4.0
 Tested up to: 4.2.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Nie wieder Abmahnungen wegen fehlender Urheberrechtsangaben auf der Webseite-Never written warnings because of missing copyright-infos on your website
+Nie wieder Abmahnungen wegen fehlender Bildnachweise auf der Webseite-Never written warnings because of missing picture-credits on your website
 
 == Description ==
 = Deutsch =
@@ -88,6 +88,16 @@ You will find the shortcode in the plugins-description of your plugins page.
 
 
 == Changelog ==
+= 1.4.3 =
+* Ergänzung optonale Promotion über den Bildnachweise-Shortcode im Frontend
+* Umstellung der Kontaktaufnahmen mit dem Server - nur noch für Dashboard+Einstellungsseite
+* Umstellung diverser globalen Konstanten auf Klasseneigenschaften
+* 
+
+
+= 1.4.1 =
+* Removing frontend-calls to plugin-website
+
 = 1.3 = 
 * Optimize curl-calls
 = 1.0 = 
