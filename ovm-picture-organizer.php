@@ -78,12 +78,9 @@ class OVM_Picture_organizer{
      *
      */
     public function plugin_init() {
-        $vars = get_option(OVM_PO_OUTPUT_OPTIONS_TAB);
-        if (false === $vars) {//Vorhandene Daten nicht überschreiben
-            $vars["promotion_text"] = 'Bildnachweise einfach und professionell verwalten und ausgeben mit dem <a href="http://www.picture-organizer.com" target="_blank">Picture-Organizer</a>';
-            $vars["promotion_position"] = 0;
-            update_option(OVM_PO_OUTPUT_OPTIONS_TAB, $vars);
-        }
+       $vars["promotion_text"] = 'Bildnachweise einfach und professionell verwalten und ausgeben mit dem <a href="http://www.picture-organizer.com" target="_blank">Picture-Organizer</a>';
+       $vars["promotion_position"] = 0;
+        update_option(OVM_PO_OUTPUT_OPTIONS_TAB, $vars);
     }
 
     /**  get_po_links()
