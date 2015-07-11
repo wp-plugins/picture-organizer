@@ -59,6 +59,11 @@ class OVM_Picture_organizer{
     public function __construct()
 {
     $this->blogurl = get_bloginfo('url');
+    $plugin_init = get_option(OVM_PO_OUTPUT_OPTIONS_TAB);
+    if (false===$plugin_init){
+        $this->plugin_init();
+    }
+
     if (is_admin()) { //actions for backend
         add_action('admin_head', array($this,'css_for_mediadetails' ));
         add_action('admin_head', array($this,'get_po_links'));
@@ -78,9 +83,15 @@ class OVM_Picture_organizer{
      *
      */
     public function plugin_init() {
-       $vars["promotion_text"] = 'Bildnachweise einfach und professionell verwalten und ausgeben mit dem <a href="http://www.picture-organizer.com" target="_blank">Picture-Organizer</a>';
+       $vars["promotion_text"] = 'Bildnachweise einfach und professionell verwalten und ausgeben mit dem <a href="http://www.picture-organizer.com" title="Nie wieder Abmahnungen wegen fehlender Bildnachweise" target="_blank">Picture-Organizer</a>';
        $vars["promotion_position"] = 0;
-        update_option(OVM_PO_OUTPUT_OPTIONS_TAB, $vars);
+       update_option(OVM_PO_OUTPUT_OPTIONS_TAB, $vars);
+       unsert($vars);
+
+       $vars["uninstall_delete"]=0;
+       update_option(OVM_PO_OPTIONS_TAB, $vars);
+
+
     }
 
     /**  get_po_links()
