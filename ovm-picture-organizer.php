@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: OVM Picture Organizer
- * Version: 1.4.3
+ * Version: 1.4.4
  * Text Domain: picture-organizer
  * Plugin URI: http://www.picture-organizer.com
  * Description: Nie wieder Abmahnungen wegen fehlender _Bildnachweise bei Bildern. Mit diesem Plugin kannst Du notwendigen Daten zu jedem Bild zuordnen und über den Shortcode [ovm_picture-organizer liste] z.B. im Impressum als formatierte Liste mit allen Angaben und Links ausgeben.
@@ -201,7 +201,15 @@ class OVM_Picture_organizer{
                 <?php
                 switch ($active_tab)
                 {
+
+
                     case OVM_PO_OUTPUT_OPTIONS_TAB:
+                        if (!is_array($o))  {
+                            $this->plugin_init();
+                            $o=get_option('active_tab');
+                            extract($o);
+                        }
+
                         if (!isset($promotion_position)) $promotion_position=0;  //Default keine Ausgabe!
 
                         ?>
@@ -209,7 +217,7 @@ class OVM_Picture_organizer{
                             <table style="width:100%">
                                 <tr>
                                     <th>HTML-Text für die Ausgabe</th>
-                                    <td><textarea name="promotion_text" id="promotion_text"><?php echo(isset($promotion_text)?$promotion_text :'')?></textarea></td>
+                                    <td><textarea name="promotion_text" id="promotion_text"><?php echo ($promotion_text)?></textarea></td>
                                 </tr>
                                 <tr>
                                     <th>Positionierung des Textes</th>
