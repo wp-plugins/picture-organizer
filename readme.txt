@@ -15,31 +15,20 @@ Nie wieder Abmahnungen wegen fehlender Bildnachweise auf der Webseite-Never writ
 Viele Webmaster beziehen preisgünstig (oder oft auch kostenlos) bilder von Image-Stock-Anbietern wie Fotolia, aboutpixel, 123rf.com oder vielen anderen.
 Eine Bedingung für die Verwendung dieser Bilder auf Webseiten ist die Nennung des Rechteinhabers, entweder direkt bei dem Bild oder im Bereich des Impressums.
 Diese Nennung muss für jedes Bld erfolgen, Eine pauschale Nennung z.B. von Fotolia ist nicht ausreichend.
+Achtung: Manche Bildanbieter verlangen, dass die Urheberrechtsangabe direkt beim Bild oder auf der gleichen Seite erfolgt.
+Diese Funktion wird nur von der Professional-Version des Plugins erfüllt.
 
-Erfolgt diese Nennung der Urheberrechtsdaten nicht, steht es dem Rechteinhaber frei, den Nutzer des Bildes kostenpflichtig abzumahnen. Dabei fallen meistens Kosten von mehr als 600,00 € an.
-Und das für jeden Einzelfall (Bild und Abmahnung)
+Dieses Plugin erzeugt für alle Bildanbieter die Urheberrechtsinformationen, die mit einer Veröffentlichung der Daten im Impressum einverstanden sein.
+Zur Darstellung der Bildnachweisdaten direkt auf der Seite der Bilddarstellung benötigen Sie die Premium-Version.
 
-Das Plugin "Picture-Organizer" hilft Dir, zu jedem einzelnen Bild in Deiner WordPress-Seite diese Copyrightinformationen zu speichern,
-entweder gleich beim Hochladen der Bilddatei, oder auch später, wenn eine Homepage diesbezüglich nachbearbeitet werden muss.
-Diese Urheberrechtsdaten werden dann als Meta-Daten zu den Bildern gespeichert.
-
-Die zweite Aufgabe des Plugins ist dann die Veröffentlichung dieser Urheberrechtsdaten auf der Webseite.  Das erfolgt einfach über einen Shortcode,
-der z.B. im Impressum eingefügt wird.
-Ergebnis: Bei korrekter Erfassung der Lizenzdaten wird den Anforderungen der Lizenzeigentümer Rechnung getragen, und Sie vermeiden so sehr teure Abmahnkosten über viele 100 Euros!
 
 = Englisch =
 A lot of webmasters use stockimages from fotolia.com, 123rf.com, aboutpixel and a lot of others picture-sources.
 This pictures are not expensive, but the license-infos has one duty for the webmasters:
 The webmaster has to publish the copyright of every image he is using.
 
-This copyrightinfo must be near of the image, or, mostly within the legal info of the website. But a lot of webmasters forgot
-to publish these copyrightinfos. Because of this the copyright-owner has the danger of a written warning with costs of more than
-500 Euros.
-This plugin helps you to avoid these trouble and these costs.
-Within the wordpress media-centere you are able to enter all copyright-informations for every image you use in your homepage.
-This worthful informations are stored in the meta-informations of every attachment.
-The other part of the plugin collects these copyright-informations an you can publish them very easy in the imprint.
-The result is: If you use this plugin correctly you never have to pay for your copyright-errors!
+This plugins takes care of all picture-sellers which accepts the publischin within the legal-Info-site. For sellers who demands the the informations are on the same page as the picture, you need the premium-version of picture organizer.
+
 
 == Installation ==
 = Deutsch =
@@ -87,12 +76,23 @@ You will find the shortcode in the plugins-description of your plugins page.
 4. Anzeige der Beispieldaten im Frontend
 
 
+
+
+
 == Changelog ==
+= 1.5 =
+* Fehlerbehebung: Anzeige von nur 5 Bildnachweisen auf alle geändert
+* Verwaltung der CSS-Angabe für die publizierten Bildnachweise eingefügt
+* Anstelle der Lizenznummer wird eine Thumbnailversion des Bildes mit Link auf eine größere Version angezeigt
+* Ergänzung dynamische Supportseite mit Links zu weiterführenden Seiten
+* Vorbereitung Einbindung Premium-Version
+
+
 = 1.4.3 =
 * Ergänzung optonale Promotion über den Bildnachweise-Shortcode im Frontend
 * Umstellung der Kontaktaufnahmen mit dem Server - nur noch für Dashboard+Einstellungsseite
 * Umstellung diverser globalen Konstanten auf Klasseneigenschaften
-* 
+ 
 
 
 = 1.4.1 =
