@@ -1,22 +1,22 @@
 === OVM Picture Organizer ===
 Contributors: RudolfFiedler
 Donate link: http://www.picture-organizer.com/donate
-Tags: pictures, images, image-license, licenses, stock-images, written warning, abmahnung, quellenangaben, Bildquelle, Bildnachweis, Urheberrecht, Bilder, Fotos 
+Tags: pictures, images, image-license, licenses, stock-images, written warning, abmahnung, quellenangaben, Bildquelle, Bildnachweis, Urheberrecht, Bilder, Fotos, fotolia, aboutpixel, 123rf,pixelio 
 Requires at least: 4.0
 Tested up to: 4.2.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Nie wieder Abmahnungen wegen fehlender Bildnachweise auf der Webseite-Never written warnings because of missing picture-credits on your website
+Bildnachweise im Impressum einfach verwalten und anzeigen  - Abmahnungen vermeiden - Never written warnings because of missing picture-credits on your website
 
 == Description ==
 = Deutsch =
-Viele Webmaster beziehen preisgünstig (oder oft auch kostenlos) bilder von Image-Stock-Anbietern wie Fotolia, aboutpixel, 123rf.com oder vielen anderen.
-Eine Bedingung für die Verwendung dieser Bilder auf Webseiten ist die Nennung des Rechteinhabers, entweder direkt bei dem Bild oder im Bereich des Impressums.
+Viele Webmaster beziehen preisgünstig (oder oft auch kostenlos) Bilder von Image-Stock-Anbietern wie Fotolia, aboutpixel, 123rf.com oder anderen.
+Eine Bedingung für die Verwendung dieser Bilder auf Webseiten ist meist die Nennung des Rechteinhabers, entweder direkt bei dem Bild oder im Bereich des Impressums.
 Diese Nennung muss für jedes Bld erfolgen, Eine pauschale Nennung z.B. von Fotolia ist nicht ausreichend.
 Achtung: Manche Bildanbieter verlangen, dass die Urheberrechtsangabe direkt beim Bild oder auf der gleichen Seite erfolgt.
-Diese Funktion wird nur von der Professional-Version des Plugins erfüllt.
+Diese Funktion wird nur von der Premium-Version des Plugins erfüllt.
 
 Dieses Plugin erzeugt für alle Bildanbieter die Urheberrechtsinformationen, die mit einer Veröffentlichung der Daten im Impressum einverstanden sein.
 Zur Darstellung der Bildnachweisdaten direkt auf der Seite der Bilddarstellung benötigen Sie die Premium-Version.
@@ -43,6 +43,9 @@ This plugins takes care of all picture-sellers which accepts the publischin with
  2. Aktiviere das Plugin über die Plugin-Übersichtsseite
  3. Füge den Shortcode [ovm_picture-organizer liste] am besten in das Impressum an der Stelle ein, an der die Liste mit den Urheberrechtsdaten gezeigt werden soll.
  4. Das war's auch schon, weitere Einstellungen sind nicht notwendig.
+ 
+ Video-Tutorial Installation, Einrichtung und Handhabung vom Picture-Organizer: http://www.picture-organizer.com/support-2/support/
+ 
 
 = Englisch =
 = Requirements =
@@ -80,6 +83,10 @@ You will find the shortcode in the plugins-description of your plugins page.
 
 
 == Changelog ==
+= 1.5.1 =
+* Fehlerbehebung: Jetzt werden nur noch die Attachments angezeigt, für die ein Lizenzkey eingegeben wurde
+
+
 = 1.5 =
 * Fehlerbehebung: Anzeige von nur 5 Bildnachweisen auf alle geändert
 * Verwaltung der CSS-Angabe für die publizierten Bildnachweise eingefügt

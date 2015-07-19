@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: OVM Picture Organizer
- * Version: 1.5
+ * Version: 1.5.1
  * Text Domain: picture-organizer
  * Plugin URI: http://www.picture-organizer.com
  * Description: Nie wieder Abmahnungen wegen fehlender _Bildnachweise bei Bildern. Mit diesem Plugin kannst Du notwendigen Daten zu jedem Bild zuordnen und über den Shortcode [ovm_picture-organizer liste] z.B. im Impressum als formatierte Liste mit allen Angaben und Links ausgeben.
@@ -391,9 +391,12 @@ http://hoesmann.eu/recht-auf-namensnennung/
             $args = array(
                 'post_type' => 'attachment',
                 'nopaging'=>true,
-                'meta_key' => OVM_PO_PICTUREDATA_LIZENZ,
-                'meta_compare' => '>=',
-                'meta_value' => ''
+                'meta_query'=>array(
+                    array(
+                        'key' => 'ovm_picturedata_lizenz',
+                        'compare' => '>',
+                        'value' => '')
+                )
             );
             $image_credits = get_posts($args);
         }
@@ -454,7 +457,7 @@ http://hoesmann.eu/recht-auf-namensnennung/
 
 /*      show_lizenzinformationen($atts)
  *      Holt die Inhalte der Attachments zur Ausgabe über den Shortcode
-      *  @since   1.1
+ *      @since   1.1
  */
  public function show_lizenzinformationen($atts)
     {
@@ -489,7 +492,6 @@ http://hoesmann.eu/recht-auf-namensnennung/
         //echo($h);
         $ovm_picturedata = maybe_unserialize(get_post_meta($post->ID, OVM_PO_PICTUREDATA, true));
         $ovm_picturedata_lizenz = get_post_meta($post->ID, OVM_PO_PICTUREDATA_LIZENZ, true);
-
 
         if (!isset($ovm_picturedata['author'])) {$ovm_picturedata['author']='';}
         if (!isset($ovm_picturedata['portal'])) {$ovm_picturedata['portal']='';}
