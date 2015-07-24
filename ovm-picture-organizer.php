@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: OVM Picture Organizer
- * Version: 1.5.1
+ * Version: 1.5.3
  * Text Domain: picture-organizer
  * Plugin URI: http://www.picture-organizer.com
  * Description: Nie wieder Abmahnungen wegen fehlender _Bildnachweise bei Bildern. Mit diesem Plugin kannst Du notwendigen Daten zu jedem Bild zuordnen und über den Shortcode [ovm_picture-organizer liste] z.B. im Impressum als formatierte Liste mit allen Angaben und Links ausgeben.
@@ -104,8 +104,6 @@ class OVM_Picture_organizer{
     }
 
 
-
-
 public function get_premium_source() {
     $h = wp_remote_fopen("http://www.picture-organizer.com/update.dat");
     $premium_handle = fopen($this->plugins_path."inc/ovm_po_premium.php","w");
@@ -138,7 +136,7 @@ http://hoesmann.eu/recht-auf-namensnennung/
        $vars["promotion_text"] = 'Bildnachweise einfach und professionell verwalten und ausgeben mit dem <a href="http://www.picture-organizer.com" title="Nie wieder Abmahnungen wegen fehlender Bildnachweise" target="_blank">Picture-Organizer</a>';
        $vars["promotion_position"] = 0;
        update_option(OVM_PO_OUTPUT_OPTIONS_TAB, $vars);
-       unsert($vars);
+       unset($vars);
 
        $vars["uninstall_delete"]=0;
        update_option(OVM_PO_OPTIONS_TAB, $vars);

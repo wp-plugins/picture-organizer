@@ -63,7 +63,14 @@ This plugins takes care of all picture-sellers which accepts the publischin with
 
 = Wo finde ich den Shortcode für die Ausgabe der Urheberrechtsinfos im Impressum? =
 
-Du findest den Shortcode in der Beschreibung des Plugins auf der Plugin-Seite
+Du findest den Shortcode in der Beschreibung des Plugins auf der Plugin-Seite, oder hier,
+der Shortcode ist:    [ovm_picture-organizer liste]
+
+
+= Warum werden manche Bilder/Attachments angezeigt, und andere nicht? =
+
+Es werden nur die Bilder/Attachments angezeigt, die im Feld "Lizenzkey" einen Wert stehen haben.
+Grund ist: Es gibt ja oft Bilder, für die keine Lizenz verfügbar oder notwendig ist (eigene Bilder, Platzhalter o. ä.)
 
 = Englisch = 
 
@@ -83,6 +90,10 @@ You will find the shortcode in the plugins-description of your plugins page.
 
 
 == Changelog ==
+= 1.5.2 =
+* Fehler behoben in plugin_init() --unset--
+
+
 = 1.5.1 =
 * Fehlerbehebung: Jetzt werden nur noch die Attachments angezeigt, für die ein Lizenzkey eingegeben wurde
 
@@ -120,5 +131,3 @@ You will find the shortcode in the plugins-description of your plugins page.
 
 = 1.0 = 
 * Überarbeitete Optik der Einfabefelder und der Ausgabe über den Shortcode
-
-
