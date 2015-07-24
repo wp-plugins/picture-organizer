@@ -1,0 +1,6 @@
+#ovm_po_image_credits   {background-color:transparent}
+#ovm_po_image_credits .ovm_po_credit_image    {width: 60px}
+#ovm_po_image_credits img   {width:50px}
+#ovm_po_image_credits th,td   {vertical-align:top}
+
+#ovm_po_credits_info  {font-size:9pt;padding:3px;background-color:#eeeeee}
